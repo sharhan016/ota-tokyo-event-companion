@@ -17,12 +17,12 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('all');
   const [centerOn, setCenterOn] = useState<{ x: number; y: number; timestamp: number } | null>(null);
 
-  const { isAdminMode, setIsAdminMode, handleTitleClick } = useAdminMode();
+  const { isAdminMode, setIsAdminMode, registerClick } = useAdminMode();
   const { location: gpsLocation, isAvailable: gpsAvailable, gpsToMapPosition, requestLocation } = useGeolocation();
-  const { calibratePin, getCurrentGPS } = useGPS();
+  const { calibratePin, getCurrentGPS, calibratedPins } = useGPS();
 
   // Convert GPS to map position
-  const userPosition = gpsLocation ? gpsToMapPosition(gpsLocation) : null;
+  const userPosition = gpsLocation ? gpsToMapPosition(gpsLocation, calibratedPins, locations) : null;
 
   const handleLocationClick = (location: Location) => {
     setSelectedLocation(location);
@@ -37,6 +37,11 @@ export default function App() {
 
   const handleCategorySelect = (category: CategoryType) => {
     setSelectedCategory(category);
+
+    // Admin Mode Trigger: 5 clicks on "Sponsors" (booth)
+    if (category === 'booth') {
+      registerClick();
+    }
 
     // Auto-zoom to category zone
     if (category !== 'all') {
@@ -98,7 +103,7 @@ export default function App() {
 
       {/* Category Chips - Glassmorphic */}
       <div className="fixed top-0 left-0 right-0 z-30 bg-gradient-to-b from-black/30 to-transparent backdrop-blur-sm">
-        <div className="pt-12" onClick={handleTitleClick}>
+        <div className="pt-12">
           <CategoryChips selectedCategory={selectedCategory} onSelectCategory={handleCategorySelect} />
         </div>
       </div>

@@ -5,7 +5,7 @@ export const useAdminMode = () => {
   const [clickCount, setClickCount] = useState(0);
   const [lastClickTime, setLastClickTime] = useState(0);
 
-  const handleTitleClick = () => {
+  const registerClick = () => {
     const now = Date.now();
     
     // Reset count if more than 2 seconds have passed
@@ -28,6 +28,6 @@ export const useAdminMode = () => {
   return {
     isAdminMode,
     setIsAdminMode,
-    handleTitleClick,
+    registerClick,
   };
 };

@@ -14,3 +14,4 @@ yarn-error.log*
 # User requests
 *.md
 .agent/
+.vercel
